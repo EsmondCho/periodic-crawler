@@ -1,7 +1,6 @@
 from celery import shared_task
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
-from pyvirtualdisplay import Display
 
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -22,10 +21,6 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
     if time_to:
         time_to = str(time_to).replace('T', ' ')
         if type(time_to) == str:
-            # dic = {
-            #     'time_to': time_to
-            # }
-            # return json.dumps(dic)
             time_to = datetime.strptime(time_to[:19], '%Y-%m-%d %H:%M:%S')
 
     if time_from:
@@ -36,7 +31,7 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
             else:
                 time_from = datetime.strptime(time_from, '%Y-%m-%d %H:%M:%S.%f')
 
-    st = StInfoTb.objects.get(st_nm='clien')
+    st = StInfoTb.objects.get(st_name='clien')
 
     site_url = st.st_url
     board_url = site_url + '/service/board/cm_vcoin?po='
@@ -44,9 +39,6 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
         page_num = start_page
     else:
         page_num = 0
-
-    #display = Display(visible=0, size=(800, 800))  
-    #display.start()
 
     service_log_path = "/home/esmond/celery_django/djserver/log/chromedriver.log"
     service_args = ['--verbose']
@@ -90,19 +82,15 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
             print('post: ' + str(index))
             
             try:
-                print('before getting driver link')
                 driver.get(link)
-                print('after getting driver link')
             except TimeoutException as ex:
                 print("TimeoutException has been thrown(1). " + str(ex))
                 driver.quit()
-                #display.stop()
                 print("sleep for 5 seconds and restart chrome driver...")
                 for i in range(1, 6):
                     print(i)
                     sleep(1)
                 try:
-                    #display.start()
                     driver = webdriver.Chrome('/bin/chromedriver_for_linux',
                                               chrome_options=options)
                     driver.set_page_load_timeout(30)
@@ -110,13 +98,11 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                 except TimeoutException as ex2:
                     print("TimeoutException has been thrown(2). " + str(ex2))
                     driver.quit()
-                    #display.stop()
                     print("sleep for 5 seconds and restart chrome driver...")
                     for i in range(1, 6):
                         print(i)
                         sleep(1)
                     try:
-                        #display.start()
                         driver = webdriver.Chrome('/bin/chromedriver_for_linux',
                                                   chrome_options=options)
                         driver.set_page_load_timeout(30)
@@ -126,7 +112,6 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                         print("page_now: {}".format(page_num))
                         print("index: {}".format(index))
                         driver.quit()
-                        #display.stop()
                         print("Stop crawling.")
 
                         fail_dic = {
@@ -149,12 +134,10 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                 view_count = driver.find_element_by_css_selector('span.view_count').find_element_by_tag_name('strong').text
             except:
                 driver.quit()
-                #display.stop()
                 print("Post parsing exception! Continue to next loop after 5 seconds...")
                 for i in range(1, 6):
                     print(i)
                     sleep(1)
-                #display.start()
                 driver = webdriver.Chrome('/bin/chromedriver_for_linux', chrome_options=options)
                 driver.set_page_load_timeout(30)
                 continue
@@ -162,7 +145,6 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
             # Closing infinite loop
             if date_obj < time_from:
                 driver.quit()
-                #display.stop()
                 result_dic = {
                     'new_stored_posts': new_stored_posts_num,
                     'new_stored_comments': new_stored_comments_all,
@@ -172,7 +154,7 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                 }
                 result_json = json.dumps(result_dic)
                 return result_json
-            # elif blabla:
+            # elif:
             #     # Add code that raising invalid params error
             #     return False
 

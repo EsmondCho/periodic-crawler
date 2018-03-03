@@ -107,8 +107,6 @@ def make_rank(period_minute):
 
         if end < datetime(2018, 2, 1):
             break
-        # if end < datetime(2017, 11, 28):
-        #     break
 
     f = open('post_word_rank_per_' + str(period_minute) + 'minutes.txt', 'w')
     f.write(str(list))
