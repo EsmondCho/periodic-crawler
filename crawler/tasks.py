@@ -58,7 +58,7 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
     new_stored_comments_all = 0
 
     while True:
-        print("page_num: {}".format(page_num))
+        print("[page_num: {}]".format(page_num))
 
         driver.get(board_url + str(page_num))
         posts = driver.find_elements_by_css_selector('div.list_item.symph_row')
@@ -79,8 +79,6 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                     links.append(post.find_element_by_css_selector('a.list_subject').get_attribute('href'))
 
         for index, link in enumerate(links):
-            print('post: ' + str(index))
-            
             try:
                 driver.get(link)
             except TimeoutException as ex:
@@ -91,8 +89,7 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                     print(i)
                     sleep(1)
                 try:
-                    driver = webdriver.Chrome('/bin/chromedriver_for_linux',
-                                              chrome_options=options)
+                    driver = webdriver.Chrome("/bin/chromedriver_for_linux", chrome_options=options, service_args=service_args, service_log_path=service_log_path)
                     driver.set_page_load_timeout(30)
                     driver.get(link)
                 except TimeoutException as ex2:
@@ -103,8 +100,7 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                         print(i)
                         sleep(1)
                     try:
-                        driver = webdriver.Chrome('/bin/chromedriver_for_linux',
-                                                  chrome_options=options)
+                        driver = webdriver.Chrome("/bin/chromedriver_for_linux", chrome_options=options, service_args=service_args, service_log_path=service_log_path)
                         driver.set_page_load_timeout(30)
                         driver.get(link)
                     except TimeoutException as ex3:
@@ -132,6 +128,8 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
                 date_obj = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
                 symph = driver.find_element_by_css_selector('div.post_symph.view_symph').find_element_by_tag_name('span').text
                 view_count = driver.find_element_by_css_selector('span.view_count').find_element_by_tag_name('strong').text
+                print(str(index) + ") " + date_str)
+
             except:
                 driver.quit()
                 print("Post parsing exception! Continue to next loop after 5 seconds...")
