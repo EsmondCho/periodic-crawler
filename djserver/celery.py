@@ -3,7 +3,7 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 from django.conf import settings
-from datetime import datetime
+from django.utils import timezone;
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djserver.settings')
 
@@ -22,8 +22,10 @@ app.conf.update(
     CELERYBEAT_SCHEDULE={
         'crawling_clien': {
             'task': 'crawler.tasks.crawling_clien',
-            'schedule': crontab(minute='*/30'),
-            'args': (str(datetime.now()), 1, False)
+            #'task': 'crawler.tasks.say_now',
+            'schedule': crontab(hour="*", minute='*'),
+            'args': (1,)
         }
     }
 )
+

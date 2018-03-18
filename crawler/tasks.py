@@ -11,25 +11,29 @@ import json
 
 
 @shared_task
-def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
+def crawling_clien(mode, time_to=None, hour=None, time_from=None, start_page=None):
 
     execute_time = datetime.now()
     start_time = time.time()
+
+    # mode argument is for getting localtime to crawling_clien()
+    if mode == 1:
+        time_to = timezone.localtime()
+        hour = 1
+        print("localtime(): {}".format(str(time_to)))
 
     # Celery crontab passing arguments not type of date but string.
     # So change str to datetime object.
     if time_to:
         time_to = str(time_to).replace('T', ' ')
-        if type(time_to) == str:
-            time_to = datetime.strptime(time_to[:19], '%Y-%m-%d %H:%M:%S')
+        time_to = datetime.strptime(time_to[:19], '%Y-%m-%d %H:%M:%S')
 
     if time_from:
         time_from = str(time_from).replace('T', ' ')
-        if type(time_from) == str:
-            if len(time_from) < 22:
-                time_from = datetime.strptime(time_from, '%Y-%m-%d %H:%M:%S')
-            else:
-                time_from = datetime.strptime(time_from, '%Y-%m-%d %H:%M:%S.%f')
+        if len(time_from) < 22:
+            time_from = datetime.strptime(time_from, '%Y-%m-%d %H:%M:%S')
+        else:
+            time_from = datetime.strptime(time_from, '%Y-%m-%d %H:%M:%S.%f')
 
     st = StInfoTb.objects.get(st_name='clien')
 
@@ -210,12 +214,23 @@ def crawling_clien(time_to=None, hour=None, time_from=None, start_page=None):
 
 
 @shared_task
-def say_name(name, gender):
+def say_now(mode):
+
+    time1 = ""
+    time2 = ""
+
+    #print("datetime.now(): {}".format(datetime.now()))
+
+    if mode == 1:
+        time1 = str(timezone.localtime())
+        time2 = str(timezone.localtime)
+        print("localtime(): {}".format(time1))
+        print("localtime: {}".format(time2))
+
     j = {
-        'name': name,
-        'gender': gender
+        'localtime()': str(time1),
+        'localtime': str(time2),
     }
     jj = json.dumps(j)
     return jj
-
 
