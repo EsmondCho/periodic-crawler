@@ -2,17 +2,17 @@ from django.db import models
 from django.utils import timezone
 
 
-# Coin Name Table
-class CoNmTb(models.Model):
-    conm_id =  models.AutoField(db_column='CONM_ID', primary_key=True)
-    conm_symbol = models.CharField(db_column='CONM_SYMBOL', max_length=10)
-    conm_registered_time = models.DateTimeField(db_column='CONM_REGISTERED_TIME', default=timezone.localtime)
+# Coin Symbol Table
+class CoSymTb(models.Model):
+    cosm_id =  models.AutoField(db_column='COSM_ID', primary_key=True)
+    cosm_symbol = models.CharField(db_column='COSM_SYMBOL', max_length=10)
+    cosm_registered_time = models.DateTimeField(db_column='COSM_REGISTERED_TIME', default=timezone.localtime)
 
 
 # Coin Dictionary Table
 class CoDicTb(models.Model):
     codic_id =  models.AutoField(db_column='CODIC_ID', primary_key=True)
-    conm_id = models.ForeignKey('CoNmTb', db_column='CONM_ID')
+    cosm_id = models.ForeignKey('CoSymTb', db_column='COSM_ID')
     codic_nickname = models.CharField(db_column='CODIC_NICKNAME', max_length=40)
     codic_registered_time = models.DateTimeField(db_column='CODIC_REGISTERED_TIME', default=timezone.localtime)
 
@@ -33,7 +33,7 @@ class PdTb(models.Model):
 class MtScTb(models.Model):
     mtsc_id =  models.AutoField(db_column='MTSC_ID', primary_key=True)
     pd_id = models.ForeignKey('PdTb', db_column='PD_ID')
-    conm_id = models.ForeignKey('CoNmTb', db_column='COMN_ID')
+    cosm_id = models.ForeignKey('CoSymTb', db_column='COSM_ID')
     mtsc_score = models.IntegerField(db_column='MTSC_SCORE')
     mtsc_mention = models.IntegerField(db_column='MTSC_MENTION')
     mtsc_registered_time = models.DateTimeField(db_column='MTSC_REGISTERED_TIME', default=timezone.localtime)
