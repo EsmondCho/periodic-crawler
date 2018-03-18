@@ -2,12 +2,12 @@ from django.contrib import admin
 from .models import *
 
 
-class CoSymTbAdmin(admin.ModelAdmin):
-    list_display = ('cosm_id', 'cosm_symbol', 'cosm_registered_time')
+class CoNmTbAdmin(admin.ModelAdmin):
+    list_display = ('conm_id', 'conm_name_ko', 'conm_name_eng', 'conm_symbol', 'conm_registered_time')
 
 
 class CoDicTbAdmin(admin.ModelAdmin):
-    list_display = ('codic_id', 'cosm_id', 'codic_nickname', 'codic_registered_time')
+    list_display = ('codic_id', 'conm_id', 'codic_nickname', 'codic_registered_time')
 
 
 class PdTbAdmin(admin.ModelAdmin):
@@ -15,10 +15,10 @@ class PdTbAdmin(admin.ModelAdmin):
 
 
 class MtScTbAdmin(admin.ModelAdmin):
-    list_display = ('mtsc_id', 'pd_id', 'cosm_id', 'mtsc_score', 'mtsc_mention', 'mtsc_registered_time')
+    list_display = ('mtsc_id', 'pd_id', 'conm_id', 'mtsc_score', 'mtsc_mention', 'mtsc_registered_time')
 
 
-admin.site.register(CoSymTb, CoSymTbAdmin)
+admin.site.register(CoNmTb, CoNmTbAdmin)
 admin.site.register(CoDicTb, CoDicTbAdmin)
 admin.site.register(PdTb, PdTbAdmin)
 admin.site.register(MtScTb, MtScTbAdmin)
