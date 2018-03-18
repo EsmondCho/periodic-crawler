@@ -3,7 +3,7 @@ from .models import *
 
 
 class CoNmTbAdmin(admin.ModelAdmin):
-    list_display = ('conm_id', 'conm_name', 'conm_registered_time')
+    list_display = ('conm_id', 'conm_symbol', 'conm_registered_time')
 
 
 class CoDicTbAdmin(admin.ModelAdmin):
